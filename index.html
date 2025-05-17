@@ -63,10 +63,11 @@
 
         .choice-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 40px;
             width: 100%;
-            max-width: 1000px;
+            max-width: 1400px;
+            justify-content: center;
         }
 
         .viewer-choice {
@@ -160,18 +161,25 @@
 
     <div class="container">
         <div class="choice-container">
-            <a href="photo-sphere/index.html" class="viewer-choice">
+            <a href="production/photo-sphere/tour.html" class="viewer-choice">
                 <img src="images/photo-sphere-preview.jpeg" alt="Photo Sphere Viewer Demo">
                 <h2>Photo Sphere Viewer</h2>
                 <p>A modern, feature-rich viewer with smooth transitions and an elegant interface. Perfect for high-end real estate presentations.</p>
                 <span class="btn">Try Photo Sphere Viewer</span>
             </a>
 
-            <a href="pannellum/index.html" class="viewer-choice">
+            <a href="production/pannellum/tour.html" class="viewer-choice">
                 <img src="https://placehold.co/600x400/2c3e50/ffffff?text=360°+Tour" alt="Pannellum Viewer Demo">
                 <h2>Pannellum Viewer</h2>
                 <p>A lightweight, mobile-friendly viewer with excellent performance. Great for quick loading and broader device compatibility.</p>
                 <span class="btn">Try Pannellum Viewer</span>
+            </a>
+
+            <a href="production/marzipano/tour.html" class="viewer-choice">
+                <img src="https://placehold.co/600x400/2c3e50/ffffff?text=Marzipano" alt="Marzipano Viewer Demo">
+                <h2>Marzipano Viewer</h2>
+                <p>An advanced viewer with high performance, smooth animations, and customizable transitions. Perfect for complex virtual tours.</p>
+                <span class="btn">Try Marzipano Viewer</span>
             </a>
         </div>
     </div>

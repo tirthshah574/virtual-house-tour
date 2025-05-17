@@ -16,12 +16,20 @@ A professional implementation of virtual property tours using three popular 360�
 - Simple and efficient
 - Located in `/pannellum/`
 
+## 3. Marzipano
+- Advanced performance optimization
+- Smooth animations
+- Customizable transitions
+- Great for complex tours
+- Located in `/marzipano/`
+
 ## Project Structure
 ```
 360-Tour-Demo/
 ├── images/               # Preview images
 ├── photo-sphere/        # Photo Sphere Viewer implementation
 ├── pannellum/          # Pannellum implementation
+├── marzipano/         # Marzipano implementation
 └── index.html         # Main selection page
 ```
 

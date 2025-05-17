@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Marzipano Virtual Tour</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/marzipano@0.10.2/dist/marzipano.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #pano {
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+        }
+
+        .hotspot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(52, 152, 219, 0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .hotspot:hover {
+            transform: scale(1.2);
+            background: rgba(41, 128, 185, 0.9);
+        }
+
+        .hotspot::after {
+            content: "→";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 16px;
+        }
+
+        .location-indicator {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 20px;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            z-index: 100;
+        }
+
+        .control-button {
+            padding: 8px 16px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div id="pano"></div>
+    <div class="location-indicator">
+        <span id="currentLocation">Entrance</span>
+    </div>
+    <div class="controls">
+        <button class="control-button" onclick="switchScene('entrance')">Entrance</button>
+        <button class="control-button" onclick="switchScene('living')">Living Room</button>
+        <button class="control-button" onclick="switchScene('end')">Living Room End</button>
+    </div>
+    
+    <div id="coordinates" style="position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; font-family: monospace; z-index: 100;">
+        Yaw: 0.000, Pitch: 0.000
+    </div>
+
+    <script>
+        // Initialize viewer
+        const viewer = new Marzipano.Viewer(document.getElementById('pano'));
+
+        // Create scenes data
+        const scenes = {
+            entrance: {
+                image: '1.jpg',
+                view: {
+                    yaw: -20.521047656832494 * Math.PI/180,
+                    pitch: -9.63701755441052 * Math.PI/180,
+                    fov: 110 * Math.PI/180
+                },
+                hotspots: [
+                    {
+                        yaw: 0.327 * Math.PI/180,
+                        pitch: 2.851 * Math.PI/180,
+                        target: 'living',
+                        text: 'Go to Living Room'
+                    }
+                ]
+            },
+            living: {
+                image: '2.jpg',
+                view: {
+                    yaw: -196.14861031564422 * Math.PI/180,
+                    pitch: -7.0526238151480225 * Math.PI/180,
+                    fov: 110 * Math.PI/180
+                },
+                hotspots: [
+                    {
+                        yaw: 174.297 * Math.PI/180,
+                        pitch: 3.480 * Math.PI/180,
+                        target: 'entrance',
+                        text: 'Back to Entrance'
+                    },
+                    {
+                        yaw: -61.565 * Math.PI/180,
+                        pitch: 3.626 * Math.PI/180,
+                        target: 'end',
+                        text: 'Living Room End'
+                    }
+                ]
+            },
+            end: {
+                image: '3.jpg',
+                view: {
+                    yaw: -199.47740610437165 * Math.PI/180,
+                    pitch: -13.413890526794235 * Math.PI/180,
+                    fov: 110 * Math.PI/180
+                },
+                hotspots: [
+                    {
+                        yaw: -172.966 * Math.PI/180,
+                        pitch: 8.953 * Math.PI/180,
+                        target: 'living',
+                        text: 'Back to Living Room'
+                    }
+                ]
+            }
+        };
+
+        // Create scene instances
+        const marzipanoScenes = {};
+
+        for (let id in scenes) {
+            // Create source
+            const source = Marzipano.ImageUrlSource.fromString(scenes[id].image);
+
+            // Create geometry
+            const geometry = new Marzipano.EquirectGeometry([{ width: 4000 }]);
+
+            // Create view
+            const limiter = Marzipano.RectilinearView.limit.traditional(4000, 100 * Math.PI/180);
+            const view = new Marzipano.RectilinearView(scenes[id].view, limiter);
+
+            // Create and save scene
+            const scene = viewer.createScene({
+                source: source,
+                geometry: geometry,
+                view: view,
+                pinFirstLevel: true
+            });
+
+            // Add coordinate debugging
+            view.addEventListener('change', () => {
+                const coords = view.screenToCoordinates({x: window.innerWidth/2, y: window.innerHeight/2});
+                document.getElementById('coordinates').innerHTML = 
+                    `Yaw: ${(coords.yaw * 180/Math.PI).toFixed(3)}, ` +
+                    `Pitch: ${(coords.pitch * 180/Math.PI).toFixed(3)}`;
+            });
+
+            // Add hotspots
+            scenes[id].hotspots.forEach(hotspot => {
+                const element = document.createElement('div');
+                element.className = 'hotspot';
+                
+                const tooltip = document.createElement('div');
+                tooltip.className = 'tooltip';
+                tooltip.textContent = hotspot.text;
+                
+                scene.hotspotContainer().createHotspot(element, 
+                    { yaw: hotspot.yaw, pitch: hotspot.pitch },
+                    { perspective: { radius: 1640, extraTransforms: "rotateX(0)" }});
+                
+                element.addEventListener('click', () => switchScene(hotspot.target));
+            });
+
+            marzipanoScenes[id] = {
+                scene: scene,
+                view: view
+            };
+        }
+
+        // Function to switch scenes
+        function switchScene(id) {
+            marzipanoScenes[id].scene.switchTo();
+            document.getElementById('currentLocation').textContent = 
+                id.charAt(0).toUpperCase() + id.slice(1).replace(/([A-Z])/g, ' $1');
+        }
+
+        // Start with entrance
+        switchScene('entrance');
+    </script>
+</body>
+</html>

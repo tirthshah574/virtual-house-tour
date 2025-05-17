@@ -45,9 +45,12 @@
 
         .viewer-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
             padding: 20px;
+            justify-content: center;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .viewer-card {
@@ -87,6 +90,12 @@
                 <h2>Photo Sphere View</h2>
                 <p>Feature-rich premium experience</p>
                 <a href="photo-sphere/tour.html" class="btn">Start Tour</a>
+            </div>
+
+            <div class="viewer-card">
+                <h2>Marzipano View</h2>
+                <p>Advanced viewer with smooth animations and high performance</p>
+                <a href="marzipano/tour.html" class="btn">Start Tour</a>
             </div>
         </div>
     </div>
