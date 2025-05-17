@@ -395,38 +395,11 @@
     // Start the tour from the entrance
     virtualTour.setCurrentNode('entrance');
 
-    // Add click handler to show coordinates
-    viewer.addEventListener('click', (e) => {
-        const coords = viewer.getPosition();
-        console.log(`Clicked position - Yaw: ${coords.yaw * 180/Math.PI}°, Pitch: ${coords.pitch * 180/Math.PI}°`);
-    });
+    // Initialize the viewer with default position at entrance
 
-    // Listen for node changes
-    virtualTour.addEventListener('node-changed', ({ node, data }) => {
-        console.log(`Current node: ${node.name}`);
-        
-        // Update location display
+    // Update location display when node changes
+    virtualTour.addEventListener('node-changed', ({ node }) => {
         document.getElementById('current-location').textContent = node.name;
-        
-        // Clear existing markers
-        markersPlugin.clearMarkers();
-        
-        // Add visible markers at arrow positions
-        node.links?.forEach(link => {
-            markersPlugin.addMarker({
-                id: `debug-${link.nodeId}`,
-                position: link.position,
-                html: `🎯 Link to ${link.name}`,
-                anchor: 'center center',
-                scale: [0.5, 0.5],
-                style: {
-                    color: 'white',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    padding: '5px',
-                    borderRadius: '5px'
-                }
-            });
-        });
     });
 
     // Handle form submission

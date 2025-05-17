@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Living Space Tour</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        #panorama {
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        .custom-hotspot {
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 3px;
+            padding: 5px 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="panorama"></div>
+    <script>
+        const viewer = pannellum.viewer('panorama', {
+            default: {
+                firstScene: "1",
+                sceneFadeDuration: 1000,
+                autoLoad: true
+            },
+            scenes: {
+                "1": {
+                    title: "Entrance",
+                    hfov: 110,
+                    pitch: -9.637,
+                    yaw: -20.521,
+                    type: "equirectangular",
+                    panorama: "1.jpg",
+                    hotSpots: [
+                        {
+                            pitch: -6.426,
+                            yaw: 1.159,
+                            type: "scene",
+                            text: "Go to Living Room",
+                            sceneId: "2",
+                            cssClass: "custom-hotspot"
+                        }
+                    ]
+                },
+                "2": {
+                    title: "Living Room Center",
+                    hfov: 110,
+                    pitch: -7.052,
+                    yaw: -196.148,
+                    type: "equirectangular",
+                    panorama: "2.jpg",
+                    hotSpots: [
+                        {
+                            pitch: -10.325,
+                            yaw: 176.914,
+                            type: "scene",
+                            text: "Back to Entrance",
+                            sceneId: "1",
+                            cssClass: "custom-hotspot"
+                        },
+                        {
+                            pitch: -6.283,
+                            yaw: -52.624,
+                            type: "scene",
+                            text: "Living Room End",
+                            sceneId: "3",
+                            cssClass: "custom-hotspot"
+                        }
+                    ]
+                },
+                "3": {
+                    title: "Living Room End",
+                    hfov: 110,
+                    pitch: -13.413,
+                    yaw: -199.477,
+                    type: "equirectangular",
+                    panorama: "3.jpg",
+                    hotSpots: [
+                        {
+                            pitch: -9.096,
+                            yaw: -167.503,
+                            type: "scene",
+                            text: "Back to Living Room",
+                            sceneId: "2",
+                            cssClass: "custom-hotspot"
+                        }
+                    ]
+                }
+            }
+        });
+    </script>
+</body>
+</html>
