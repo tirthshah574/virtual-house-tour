@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <style>
+        #panorama {
+            width: 600px;
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="panorama"></div>
+    <script>
+        // Create viewer with hotspot debugging
+        const viewer = pannellum.viewer('panorama', {
+            hotSpotDebug: true,  // Enable coordinate display
+            "default": {
+                "firstScene": "1",  // Start from entrance
+                "author": "Tirth",
+                "sceneFadeDuration": 1000
+            },
+
+            "scenes": {
+                "1": {
+                    "title": "Entrance",
+                    "hfov": 110,
+                    "pitch": -9.63701755441052,
+                    "yaw": -20.521047656832494,
+                    "type": "equirectangular",
+                    "panorama": "1.jpg",
+                    "hotSpots": [
+                        {
+                            "pitch": -6.426806516676132,
+                            "yaw": 1.1598906934759476,
+                            "type": "scene",
+                            "text": "Go to Living Room",
+                            "sceneId": "2"
+                        }
+                    ]
+                },
+
+                "2": {
+                    "title": "Living Room Center",
+                    "hfov": 110,
+                    "pitch": -7.0526238151480225,
+                    "yaw": -196.14861031564422,
+                    "type": "equirectangular",
+                    "panorama": "2.jpg",
+                    "hotSpots": [
+                        {
+                            "pitch": -10.325772181946313,
+                            "yaw": 176.91414891618655,
+                            "type": "scene",
+                            "text": "Back to Entrance",
+                            "sceneId": "1"
+                        },
+                        {
+                            "pitch": -6.283570020690842,
+                            "yaw": -52.62466555606735,
+                            "type": "scene",
+                            "text": "Living Room End",
+                            "sceneId": "3"
+                        }
+                    ]
+                },
+
+                "3": {
+                    "title": "Living Room End",
+                    "hfov": 110,
+                    "pitch": -13.413890526794235,
+                    "yaw": -199.47740610437165,
+                    "type": "equirectangular",
+                    "panorama": "3.jpg",
+                    "hotSpots": [
+                        {
+                            "pitch": -9.09629043509551,
+                            "yaw": -167.50337685435255,
+                            "type": "scene",
+                            "text": "Back to Living Room Center",
+                            "sceneId": "2"
+                        }
+                    ]
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Home Tour - Photo Sphere Viewer</title>
+
+    <!-- Core Photo Sphere Viewer CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/three/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.js"></script>
+
+    <!-- Virtual Tour Plugin -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/virtual-tour-plugin/index.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/virtual-tour-plugin/index.min.js"></script>
+
+    <!-- Markers Plugin for better hotspots -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin/index.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin/index.min.js"></script>
+
+    <!-- Google Fonts and Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+        }
+
+        body {
+            background: var(--light-bg);
+            color: var(--text-color);
+        }
+
+        header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .brand h1 {
+            font-size: 1.5em;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .tour-container {
+            position: relative;
+        }
+
+        #viewer {
+            width: 100%;
+            height: 70vh;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .controls {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .room-button {
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .room-button:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .navigation-map {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .navigation-map h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .map-indicator {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            align-items: center;
+        }
+
+        .location-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        .location-dot.active {
+            background: #e74c3c;
+        }
+
+        .property-details {
+            margin-bottom: 30px;
+        }
+
+        .property-details h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .detail-item i {
+            width: 20px;
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+
+        .contact-form {
+            margin-top: 20px;
+        }
+
+        .contact-form h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+
+        .contact-form button {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form button:hover {
+            background: #2980b9;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="brand">
+                <h1>Luxury Home Tour</h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="tour-container">
+                <div id="viewer"></div>
+                <div class="controls">
+                    <button class="room-button" onclick="virtualTour.setCurrentNode('entrance')">
+                        <i class="fas fa-door-open"></i> Entrance
+                    </button>
+                    <button class="room-button" onclick="virtualTour.setCurrentNode('living-room')">
+                        <i class="fas fa-couch"></i> Living Room
+                    </button>
+                    <button class="room-button" onclick="virtualTour.setCurrentNode('living-room-end')">
+                        <i class="fas fa-chair"></i> Living Room End
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="navigation-map">
+                    <h3>Current Location</h3>
+                    <div class="map-indicator">
+                        <div class="location-dot active"></div>
+                        <span class="location-label" id="current-location">Entrance</span>
+                    </div>
+                </div>
+
+                <div class="property-details">
+                    <h2>Property Details</h2>
+                    <div class="detail-item">
+                        <i class="fas fa-home"></i>
+                        <span>Modern Living Space</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-ruler-combined"></i>
+                        <span>2,500 sq ft</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-bed"></i>
+                        <span>3 Bedrooms</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-bath"></i>
+                        <span>2.5 Bathrooms</span>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h2>Request Information</h2>
+                    <form id="inquiry-form">
+                        <input type="text" placeholder="Your Name" required>
+                        <input type="email" placeholder="Your Email" required>
+                        <input type="tel" placeholder="Phone Number">
+                        <textarea placeholder="Your Message" rows="4"></textarea>
+                        <button type="submit">Send Inquiry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const viewer = new PhotoSphereViewer.Viewer({
+        container: 'viewer',
+        defaultZoomLvl: 50,
+        touchmoveTwoFingers: true,
+        defaultLat: 0,
+        defaultLong: 0,
+        sphereCorrection: {
+            pan: 0,
+            tilt: 0,
+            roll: 0
+        },
+        plugins: [
+            [PhotoSphereViewer.MarkersPlugin, {
+                markers: []
+            }],
+            [PhotoSphereViewer.VirtualTourPlugin, {
+                positionMode: 'manual',
+                renderMode: '3d',
+                arrowStyle: {
+                    color: '#ffa500',
+                    hoverColor: '#ff4500',
+                    size: '20px',
+                    offset: '10px'
+                },
+                transition: {
+                    duration: 1500,
+                    loader: true,
+                    blur: true,
+                },
+                nodes: [
+                    {
+                        id: 'entrance',
+                        panorama: '1.jpg',
+                        thumbnail: '1.jpg',
+                        name: 'Entrance',
+                        links: [
+                            {
+                                nodeId: 'living-room',
+                                position: { 
+                                    yaw: 154.21042271443233 * Math.PI/180,
+                                    pitch: -8.831561890780444 * Math.PI/180
+                                },
+                                name: 'Go to Living Room',
+                            }
+                        ],
+                    },
+                    {
+                        id: 'living-room',
+                        panorama: '2.jpg',
+                        thumbnail: '2.jpg',
+                        name: 'Living Room Center',
+                        links: [
+                            {
+                                nodeId: 'entrance',
+                                position: { 
+                                    yaw: 321.07111341595964 * Math.PI/180,
+                                    pitch: -9.386746159418697 * Math.PI/180
+                                },
+                                name: 'Back to Entrance',
+                            },
+                            {
+                                nodeId: 'living-room-end',
+                                position: { 
+                                    yaw: 98.17519774996946 * Math.PI/180,
+                                    pitch: -10.163182543442948 * Math.PI/180
+                                },
+                                name: 'To Living Room End',
+                            }
+                        ],
+                    },
+                    {
+                        id: 'living-room-end',
+                        panorama: '3.jpg',
+                        thumbnail: '3.jpg',
+                        name: 'Living Room End',
+                        links: [
+                            {
+                                nodeId: 'living-room',
+                                position: { 
+                                    yaw: 257.3654073927792 * Math.PI/180,
+                                    pitch: -2.462911738698057 * Math.PI/180
+                                },
+                                name: 'Back to Living Room Center',
+                            }
+                        ],
+                    }
+                ],
+            }]
+        ],
+        navbar: [
+            'zoom',
+            'move',
+            'fullscreen',
+        ]
+    });
+
+    // Get the virtual tour plugin instance
+    const virtualTour = viewer.getPlugin(PhotoSphereViewer.VirtualTourPlugin);
+    const markersPlugin = viewer.getPlugin(PhotoSphereViewer.MarkersPlugin);
+
+    // Start the tour from the entrance
+    virtualTour.setCurrentNode('entrance');
+
+    // Add click handler to show coordinates
+    viewer.addEventListener('click', (e) => {
+        const coords = viewer.getPosition();
+        console.log(`Clicked position - Yaw: ${coords.yaw * 180/Math.PI}°, Pitch: ${coords.pitch * 180/Math.PI}°`);
+    });
+
+    // Listen for node changes
+    virtualTour.addEventListener('node-changed', ({ node, data }) => {
+        console.log(`Current node: ${node.name}`);
+        
+        // Update location display
+        document.getElementById('current-location').textContent = node.name;
+        
+        // Clear existing markers
+        markersPlugin.clearMarkers();
+        
+        // Add visible markers at arrow positions
+        node.links?.forEach(link => {
+            markersPlugin.addMarker({
+                id: `debug-${link.nodeId}`,
+                position: link.position,
+                html: `🎯 Link to ${link.name}`,
+                anchor: 'center center',
+                scale: [0.5, 0.5],
+                style: {
+                    color: 'white',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    padding: '5px',
+                    borderRadius: '5px'
+                }
+            });
+        });
+    });
+
+    // Handle form submission
+    document.getElementById('inquiry-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Thank you for your inquiry! We will contact you soon.');
+        this.reset();
+    });
+    </script>
+</body>
+</html>

@@ -1,14 +1,14 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luxury Home Virtual Tour | Modern Living Space</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css" />
+    <title>360° Virtual Tour Demo - Choose Your Viewer</title>
+    
+    <!-- Google Fonts and Font Awesome -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -27,345 +27,157 @@
         body {
             background: var(--light-bg);
             color: var(--text-color);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         header {
             background: white;
             padding: 20px 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 100;
+            text-align: center;
+            margin-bottom: 40px;
         }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand h1 {
-            font-size: 1.5em;
+        h1 {
+            font-size: 2em;
             color: var(--primary-color);
+            margin-bottom: 10px;
         }
 
-        .main-content {
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .choice-container {
             display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .tour-container {
-            position: relative;
-        }
-
-        #panorama {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
             width: 100%;
-            height: 70vh;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 1000px;
         }
 
-        .controls {
+        .viewer-choice {
             background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .room-button {
-            padding: 10px 20px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 5px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
-        .room-button:hover {
+        .viewer-choice:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .viewer-choice img {
+            width: 100%;
+            max-width: 400px;
+            height: 200px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background: var(--light-bg);
+        }
+
+        .viewer-choice h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .viewer-choice p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .btn {
             background: var(--accent-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #2980b9;
             transform: translateY(-2px);
         }
 
-        .sidebar {
+        footer {
             background: white;
-            border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
         }
 
-        .property-details {
-            margin-bottom: 30px;
-        }
-
-        .property-details h2 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-
-        .detail-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
+        footer p {
             color: #666;
         }
 
-        .detail-item i {
-            width: 20px;
-            margin-right: 10px;
-            color: var(--accent-color);
-        }
-
-        .contact-form {
-            margin-top: 20px;
-        }
-
-        .contact-form input,
-        .contact-form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .contact-form button {
-            width: 100%;
-            padding: 12px;
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .navigation-map {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .navigation-map h3 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            font-size: 1em;
-        }
-
-        .map-indicator {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .location-dot {
-            width: 12px;
-            height: 12px;
-            background: var(--accent-color);
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .location-dot.active {
-            background: #e74c3c;
-        }
-
-        .location-label {
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        @media (max-width: 1024px) {
-            .main-content {
+        @media (max-width: 768px) {
+            .choice-container {
                 grid-template-columns: 1fr;
             }
             
-            .sidebar {
-                order: -1;
+            .container {
+                padding: 20px;
             }
         }
     </style>
 </head>
-
 <body>
     <header>
-        <div class="header-content">
-            <div class="brand">
-                <h1>Luxury Home Tour</h1>
-            </div>
-        </div>
+        <h1>360° Virtual Tour Demo</h1>
+        <p class="subtitle">Choose your preferred viewing experience</p>
     </header>
 
     <div class="container">
-        <div class="main-content">
-            <div class="tour-container">
-                <div id="panorama"></div>
-                <div class="controls">
-                    <button class="room-button" onclick="viewer.loadScene('1')">
-                        <i class="fas fa-door-open"></i> Entrance
-                    </button>
-                    <button class="room-button" onclick="viewer.loadScene('2')">
-                        <i class="fas fa-couch"></i> Living Room
-                    </button>
-                    <button class="room-button" onclick="viewer.loadScene('3')">
-                        <i class="fas fa-chair"></i> Living Room End
-                    </button>
-                </div>
-            </div>
+        <div class="choice-container">
+            <a href="photo-sphere/index.html" class="viewer-choice">
+                <img src="images/photo-sphere-preview.jpeg" alt="Photo Sphere Viewer Demo">
+                <h2>Photo Sphere Viewer</h2>
+                <p>A modern, feature-rich viewer with smooth transitions and an elegant interface. Perfect for high-end real estate presentations.</p>
+                <span class="btn">Try Photo Sphere Viewer</span>
+            </a>
 
-            <div class="sidebar">
-                <div class="navigation-map">
-                    <h3>Current Location</h3>
-                    <div class="map-indicator">
-                        <div class="location-dot active"></div>
-                        <span class="location-label" id="current-location">Entrance</span>
-                    </div>
-                </div>
-
-                <div class="property-details">
-                    <h2>Property Details</h2>
-                    <div class="detail-item">
-                        <i class="fas fa-home"></i>
-                        <span>Modern Living Space</span>
-                    </div>
-                    <div class="detail-item">
-                        <i class="fas fa-ruler-combined"></i>
-                        <span>2,500 sq ft</span>
-                    </div>
-                    <div class="detail-item">
-                        <i class="fas fa-bed"></i>
-                        <span>3 Bedrooms</span>
-                    </div>
-                    <div class="detail-item">
-                        <i class="fas fa-bath"></i>
-                        <span>2.5 Bathrooms</span>
-                    </div>
-                </div>
-
-                <div class="contact-form">
-                    <h2>Request Information</h2>
-                    <form id="inquiry-form">
-                        <input type="text" placeholder="Your Name" required>
-                        <input type="email" placeholder="Your Email" required>
-                        <input type="tel" placeholder="Phone Number">
-                        <textarea placeholder="Your Message" rows="4"></textarea>
-                        <button type="submit">Send Inquiry</button>
-                    </form>
-                </div>
-            </div>
+            <a href="pannellum/index.html" class="viewer-choice">
+                <img src="https://placehold.co/600x400/2c3e50/ffffff?text=360°+Tour" alt="Pannellum Viewer Demo">
+                <h2>Pannellum Viewer</h2>
+                <p>A lightweight, mobile-friendly viewer with excellent performance. Great for quick loading and broader device compatibility.</p>
+                <span class="btn">Try Pannellum Viewer</span>
+            </a>
         </div>
     </div>
 
-    <script>
-        const viewer = pannellum.viewer('panorama', {
-            default: {
-                firstScene: "1",
-                sceneFadeDuration: 1000
-            },
-
-            scenes: {
-                "1": {
-                    title: "Entrance",
-                    hfov: 110,
-                    pitch: -9.63701755441052,
-                    yaw: -20.521047656832494,
-                    type: "equirectangular",
-                    panorama: "1.jpg",
-                    hotSpots: [
-                        {
-                            pitch: -6.426806516676132,
-                            yaw: 1.1598906934759476,
-                            type: "scene",
-                            text: "Go to Living Room",
-                            sceneId: "2"
-                        }
-                    ]
-                },
-
-                "2": {
-                    title: "Living Room Center",
-                    hfov: 110,
-                    pitch: -7.0526238151480225,
-                    yaw: -196.14861031564422,
-                    type: "equirectangular",
-                    panorama: "2.jpg",
-                    hotSpots: [
-                        {
-                            pitch: -10.325772181946313,
-                            yaw: 176.91414891618655,
-                            type: "scene",
-                            text: "Back to Entrance",
-                            sceneId: "1"
-                        },
-                        {
-                            pitch: -6.283570020690842,
-                            yaw: -52.62466555606735,
-                            type: "scene",
-                            text: "Living Room End",
-                            sceneId: "3"
-                        }
-                    ]
-                },
-
-                "3": {
-                    title: "Living Room End",
-                    hfov: 110,
-                    pitch: -13.413890526794235,
-                    yaw: -199.47740610437165,
-                    type: "equirectangular",
-                    panorama: "3.jpg",
-                    hotSpots: [
-                        {
-                            pitch: -9.09629043509551,
-                            yaw: -167.50337685435255,
-                            type: "scene",
-                            text: "Back to Living Room Center",
-                            sceneId: "2"
-                        }
-                    ]
-                }
-            }
-        });
-
-        // Update current location indicator
-        viewer.on('scenechange', function(sceneId) {
-            const locationLabel = document.getElementById('current-location');
-            const scenes = {
-                '1': 'Entrance',
-                '2': 'Living Room',
-                '3': 'Living Room End'
-            };
-            locationLabel.textContent = scenes[sceneId];
-        });
-
-        // Handle form submission
-        document.getElementById('inquiry-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Thank you for your inquiry! We will contact you soon.');
-            this.reset();
-        });
-    </script>
+    <footer>
+        <p>© 2025 Virtual Tour Demo. Choose the best viewer for your needs.</p>
+    </footer>
 </body>
-
 </html>
