@@ -59,6 +59,20 @@
             border-radius: 10px;
             text-align: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .viewer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .viewer-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
         }
 
         .btn {
@@ -81,18 +95,21 @@
     <div class="container">
         <div class="viewer-options">
             <div class="viewer-card">
+                <img src="../images/pannellum.jpg" alt="Pannellum Viewer" class="viewer-image">
                 <h2>Pannellum View</h2>
                 <p>Lightweight and mobile-friendly viewer</p>
                 <a href="pannellum/tour.html" class="btn">Start Tour</a>
             </div>
             
             <div class="viewer-card">
+                <img src="../images/photo-sphere-preview.jpeg" alt="Photo Sphere Viewer" class="viewer-image">
                 <h2>Photo Sphere View</h2>
                 <p>Feature-rich premium experience</p>
                 <a href="photo-sphere/tour.html" class="btn">Start Tour</a>
             </div>
 
             <div class="viewer-card">
+                <img src="../images/mazripano.jpg" alt="Marzipano Viewer" class="viewer-image">
                 <h2>Marzipano View</h2>
                 <p>Advanced viewer with smooth animations and high performance</p>
                 <a href="marzipano/tour.html" class="btn">Start Tour</a>
